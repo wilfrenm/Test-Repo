@@ -1,0 +1,201 @@
+<!--Concepts Explained
+        1. Row and Column adjustment
+        2. Padding as p
+        3. Margin as m -->
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        </head>
+        <body class="bg-secondary">
+            <header class="p-3 bg-dark text-white sticky-top">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <h1>My Blog</h1>
+                    </div>
+                    <div class="col-12 col-md-6 mt-2 d-flex justify-content-start justify-content-md-end">
+                        <nav>
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><a href="#" class="text-white text-decoration-none">Home</a></li>
+                                <li class="list-inline-item"><a href="#" class="text-white text-decoration-none">About</a></li>
+                                <li class="list-inline-item"><a href="#" class="text-white text-decoration-none">Contact</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <div class="container pt-3 pb-3 py-3 ">
+               <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h1 class="card-title">Simple Blog with Bootstrap 5 </h1>
+                    <p class="card-text">Here you can view recent post sample</p>
+        
+                </div>
+               </div>
+                <div class="row mt-4">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-2">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-6 col-sm-12">
+                                    <img class="img-fluid rounded h-100 w-100" src="https://picsum.photos/300/200" alt="">
+                                </div>
+                            
+                                <div class="col-6">
+                                    <div class="card-body">
+                                        <h2 class="mb-3">Post Title 1</h2>
+                                        <p>Date : Feb 15, 2024</p>
+                                        <p>This is the content of Post 1</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-2">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-6 col-sm-12">
+                                    <img class="img-fluid rounded h-100 w-100"  src="https://picsum.photos/300/200" alt="">
+                                </div>
+                            
+                                <div class="col-6">
+                                    <div class="card-body">
+                                        <h2 class="mb-3">Post Title 2</h2>
+                                        <p>Date : Feb 16, 2024</p>
+                                        <p>This is the content of Post 2</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-2">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-6 col-sm-12">
+                                    <img class="img-fluid rounded h-100 w-100"  src="https://picsum.photos/300/200" alt="">
+                                </div>
+                            
+                                <div class="col-6">
+                                    <div class="card-body">
+                                        <h2 class="mb-3">Post Title 3</h2>
+                                        <p>Date : Feb 17, 2024</p>
+                                        <p>This is the content of Post 3</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-2">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-6 col-sm-12">
+                                    <img class="img-fluid rounded h-100 w-100"  class="" src="https://picsum.photos/300/200" alt="">
+                                </div>
+                            
+                                <div class="col-6">
+                                    <div class="card-body">
+                                        <h2 class="mb-3">Post Title 4</h2>
+                                        <p>Date : Feb 15, 2024</p>
+                                        <p>This is the content of Post 4</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-2">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-6 col-sm-12">
+                                    <img class="img-fluid rounded h-100 w-100"  src="https://picsum.photos/300/200" alt="">
+                                </div>
+                            
+                                <div class="col-6">
+                                    <div class="card-body">
+                                        <h2 class="mb-3">Post Title 5</h2>
+                                        <p>Date : Feb 16, 2024</p>
+                                        <p>This is the content of Post 5</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-2">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-6 col-sm-12">
+                                    <img class="img-fluid rounded h-100 w-100"  src="https://picsum.photos/300/200" alt="">
+                                </div>
+                            
+                                <div class="col-6">
+                                    <div class="card-body">
+                                        <h2 class="mb-3">Post Title 6</h2>
+                                        <p>Date : Feb 17, 2024</p>
+                                        <p>This is the content of Post 6</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-2">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-6 col-sm-12">
+                                    <img class="img-fluid rounded h-100 w-100"  src="https://picsum.photos/300/200" alt="">
+                                </div>
+                            
+                                <div class="col-6">
+                                    <div class="card-body">
+                                        <h2 class="mb-3">Post Title 7</h2>
+                                        <p>Date : Feb 18, 2024</p>
+                                        <p>This is the content of Post 7</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="container  mb-2">
+                <div class="row">
+                    <div class="col-12 col-lg-6 bg-white p-3">
+                        <h2>Contact Form</h2>
+                        <form action="">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" class="form-control" name="" id="">
+                            </div>
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" name="" id="">
+                            </div>
+                            <div class="form-group">
+                                <label>Message</label>
+                                <textarea name="" class="form-control" id="" cols="30" rows="10"></textarea>
+                            </div>
+                            <button class="btn btn-primary my-2">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        
+            <footer class="p-3 bg-dark text-white">
+                <div class="row">
+                    <div class="col">
+                        <p>2024 My Blog. All Rights reserved</p>
+                    </div>
+                    <div class="col">
+                        <ul class="list_inline">
+                            <li class="list-inline-item "><a href="#" class="text-decoration-none text-white">Terms of services</a></li>
+                            <li class="list-inline-item "><a href="#" class="text-decoration-none text-white">Privacy policy</a></li>
+                            <li class="list-inline-item "><a href="#" class="text-decoration-none text-white">Sitemap</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </footer>
+        
+        </body>
+        </html>
