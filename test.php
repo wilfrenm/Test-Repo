@@ -13,7 +13,7 @@ function getCommittedFilesDiff3($branch_1, $branch_3) {
 
 // Example usage
 $branch_1 = 'test';
-$branch_3 = 'dev';
+$branch_3 = 'uat';
 
 $committedFilesDiff = getCommittedFilesDiff3($branch_1, $branch_3);
 
