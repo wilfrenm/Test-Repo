@@ -2,7 +2,7 @@
 // Function to get the file differences between two branches
 function getCommittedFilesDiff3($branch_1, $branch_3) {
     // Run the git diff command to compare branches and get the list of files
-    $command = "git diff --name-only $branch_1 $branch_3";
+    $command = "git diff $branch_1 $branch_3";
     $output = shell_exec($command);
 	// print_r($output);die;
     // Convert the output into an array of file names
