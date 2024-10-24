@@ -12,8 +12,8 @@ function getCommittedFilesDiff3($branch_1, $branch_3) {
 }
 
 // Example usage
-$branch_1 = 'dev';
-$branch_3 = 'test';
+$branch_1 = 'test';
+$branch_3 = 'dev';
 
 $committedFilesDiff = getCommittedFilesDiff3($branch_1, $branch_3);
 
