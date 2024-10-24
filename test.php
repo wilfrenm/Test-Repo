@@ -1,4 +1,123 @@
 <?php
+
+// Function to parse git diff output
+function parseGitDiff($diff_output) {
+    $changes = [];
+    $currentFile = null;
+
+    foreach ($diff_output as $line) {
+        // Detect file change start
+        if (preg_match('/^diff --git a\/(.*?) b\/(.*?)/', $line, $matches)) {
+            $currentFile = $matches[1];
+            $changes[$currentFile] = [
+                'status' => 'modified',
+                'changes' => []
+            ];
+        }
+
+        // Detect deleted file
+        if (strpos($line, 'deleted file mode') !== false) {
+            $changes[$currentFile]['status'] = 'deleted';
+        }
+
+        // Detect added or removed lines
+        if (preg_match('/^\+(?!\+\+)/', $line)) {
+            $changes[$currentFile]['changes'][] = ['type' => 'added', 'line' => $line];
+        } elseif (preg_match('/^-(?!\-)/', $line)) {
+            $changes[$currentFile]['changes'][] = ['type' => 'removed', 'line' => $line];
+        }
+    }
+
+    return $changes;
+}
+
+// Function to display the parsed summary
+function displayDiffSummary($changes) {
+    foreach ($changes as $file => $details) {
+        echo "File: $file\n";
+        
+        if ($details['status'] == 'deleted') {
+            echo "Status: Deleted\n";
+        } else {
+            echo "Status: Modified\n";
+            if (!empty($details['changes'])) {
+                echo "Changes:\n";
+                foreach ($details['changes'] as $change) {
+                    $action = ($change['type'] == 'added') ? 'Added' : 'Removed';
+                    echo "  $action: " . trim($change['line']) . "\n";
+                }
+            }
+        }
+        echo "\n";
+    }
+}
+
+// Function to get git diff output dynamically (via file, stdin, or command)
+function getGitDiff($source = 'stdin') {
+    $diff_output = [];
+
+    if ($source === 'file') {
+        // Read from a file (assumes a file path provided)
+        $file_path = 'git_diff_output.txt';  // Change this path if needed
+        if (file_exists($file_path)) {
+            $diff_output = file($file_path, FILE_IGNORE_NEW_LINES);
+        } else {
+            echo "Error: File not found.\n";
+            exit(1);
+        }
+    } elseif ($source === 'stdin') {
+        // Read from standard input (ideal for shell piping)
+        echo "Enter or paste the git diff output (end input with Ctrl+D on UNIX or Ctrl+Z on Windows):\n";
+        while ($line = fgets(STDIN)) {
+            $diff_output[] = trim($line);
+        }
+    } elseif ($source === 'command') {
+        // Execute the git diff command and capture the output
+        $branch1 = 'dev';  // Set your branch names
+        $branch2 = 'test';  // Set your branch names
+        $command = "git diff $branch1 $branch2";
+        exec($command, $diff_output);
+    }
+
+    return $diff_output;
+}
+
+// Get git diff output dynamically (from stdin, file, or git diff command)
+$diff_source = 'command';  // Change to 'file', 'stdin', or 'command' based on your needs
+$diff_output = getGitDiff($diff_source);
+
+// Parse and display the git diff summary
+if (!empty($diff_output)) {
+    $parsed_diff = parseGitDiff($diff_output);
+    displayDiffSummary($parsed_diff);
+} else {
+    echo "No diff data available.\n";
+}
+die;
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php
 // Function to get the file differences between two branches
 function getCommittedFilesDiff3($branch_1, $branch_3) {
     // Run the git diff command to compare branches and get the list of files
