@@ -1,4 +1,173 @@
 <?php
+// // Function to get the file differences between two branches
+// function getCommittedFilesDiff5($branch_1, $branch_3) {
+//     // Run the git diff command to compare branches and get the list of files
+//     $command = "git diff $branch_1 $branch_3";
+//     $output = shell_exec($command);
+// 	// print_r($output);die;
+//     // Convert the output into an array of file names
+//     $files = array_filter(explode("\n", $output));
+// 	print_r($files);die;
+//     return $files;
+// }
+
+// // Example usage
+// $branch_1 = 'test';
+// $branch_3 = 'uat';
+
+// $committedFilesDiff = getCommittedFilesDiff5($branch_1, $branch_3);
+
+// if (!empty($committedFilesDiff)) {
+//     echo "Files committed to $branch_1 but not in $branch_3:\n";
+//     foreach ($committedFilesDiff as $file) {
+//         echo "- $file\n";
+//     }
+// } else {
+//     echo "No differences found between $branch_1 and $branch_3.\n";
+// }
+// die;
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+<?php
+
+// Function to get the diff between two branches
+function getBranchDiff($branch1, $branch2) {
+    $diff_output = [];
+    $command = "git diff $branch1 $branch2 --name-status";  // Get the file changes between the two branches
+    exec($command, $diff_output);  // Run the git diff command
+    return $diff_output;
+}
+
+// Function to get the diff for specific files between two branches
+function getFileDiffBetweenBranches($branch1, $branch2, $file) {
+    $diff_output = [];
+    $command = "git diff $branch1 $branch2 -- $file";  // Get the diff for a specific file between two branches
+    exec($command, $diff_output);  // Run the git diff command
+    return $diff_output;
+}
+
+// Function to get the last commit ID for a file in a branch
+function getLastCommitId($file, $branch) {
+    $commit_id = '';
+    $command = "git log -n 1 --pretty=format:'%H' -- $file $branch";  // Get the last commit ID for the file in the specified branch
+    exec($command, $commit_id);  // Run the git log command
+    return isset($commit_id[0]) ? $commit_id[0] : 'N/A';  // Return commit ID or N/A if not found
+}
+
+// Function to display the summary of changes between two branches
+function displayBranchDiffSummary($branch1, $branch2) {
+    // Get the file-level changes between the two branches
+    $diff_files = getBranchDiff($branch1, $branch2);
+
+    // Iterate over each file
+    foreach ($diff_files as $file_status) {
+        $parts = preg_split('/\s+/', $file_status);
+        $status = $parts[0];  // e.g., 'M' for modified, 'A' for added, 'D' for deleted
+        $file = $parts[1];    // The file name
+
+        // Get the last commit ID for the file in branch2 (the branch where changes are being compared)
+        $commit_id = getLastCommitId($file, $branch2);
+
+        echo "============================================================\n";
+        echo "File: $file\n";
+        echo "Status: " . interpretStatus($status) . "\n";
+        echo "Commit ID: $commit_id\n";  // Display the last commit ID for the file
+
+        // Fetch the diff for the file between branches
+        $file_diff = getFileDiffBetweenBranches($branch1, $branch2, $file);
+
+        $added_lines = [];
+        $removed_lines = [];
+
+        // Parse the file diff for added and removed lines
+        foreach ($file_diff as $line) {
+            if (preg_match('/^\+(?!\+\+)/', $line)) {
+                $added_lines[] = trim($line);
+            } elseif (preg_match('/^-(?!\-)/', $line)) {
+                $removed_lines[] = trim($line);
+            }
+        }
+
+        // Display changes
+        echo "Changes:\n";
+        if (!empty($added_lines)) {
+            foreach ($added_lines as $added) {
+                echo "  Added: " . htmlentities($added) . "\n";
+            }
+        }
+
+        if (!empty($removed_lines)) {
+            foreach ($removed_lines as $removed) {
+                echo "  Removed: " . htmlentities($removed) . "\n";
+            }
+        }
+
+        echo "============================================================\n\n";
+    }
+}
+
+// Helper function to interpret the status (M, A, D, etc.)
+function interpretStatus($status) {
+    switch ($status) {
+        case 'M':
+            return 'Modified';
+        case 'A':
+            return 'Added';
+        case 'D':
+            return 'Deleted';
+        default:
+            return 'Unknown';
+    }
+}
+
+// Branch names to compare
+$branch1 = 'test';      // Set your first branch name (e.g., 'main', 'develop', etc.)
+$branch2 = 'uat';   // Set your second branch name (e.g., 'feature-branch', etc.)
+
+// Display the diff summary between two branches
+displayBranchDiffSummary($branch1, $branch2);
+die;
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php
 
 // Function to parse git diff output
 function parseGitDiff2($diff_output) {
