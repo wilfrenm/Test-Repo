@@ -1,6 +1,139 @@
 <?php
 
 // Function to parse git diff output
+function parseGitDiff2($diff_output) {
+    $changes = [];
+    $currentFile = null;
+
+    foreach ($diff_output as $line) {
+        // Detect file change start
+        if (preg_match('/^diff --git a\/(.*?) b\/(.*?)/', $line, $matches)) {
+            $currentFile = $matches[1];
+            $changes[$currentFile] = [
+                'status' => 'modified',
+                'changes' => []
+            ];
+        }
+
+        // Detect deleted file
+        if (strpos($line, 'deleted file mode') !== false) {
+            $changes[$currentFile]['status'] = 'deleted';
+        }
+
+        // Detect added or removed lines
+        if (preg_match('/^\+(?!\+\+)/', $line)) {
+            $changes[$currentFile]['changes'][] = ['type' => 'added', 'line' => $line];
+        } elseif (preg_match('/^-(?!\-)/', $line)) {
+            $changes[$currentFile]['changes'][] = ['type' => 'removed', 'line' => $line];
+        }
+    }
+
+    return $changes;
+}
+
+// Function to get commit IDs for a specific file and branch
+function getCommitIDsForFile($branch, $file) {
+    $commit_ids = [];
+    $command = "git log --pretty=format:'%H' $branch -- $file";  // Fetch commit hashes for a specific file
+    exec($command, $commit_ids);  // Run the git log command
+
+    return $commit_ids;
+}
+
+// Function to display the parsed summary with commit IDs
+function displayDiffSummaryWithCommits($changes, $branch1) {
+    foreach ($changes as $file => $details) {
+        echo "File: $file\n";
+        
+        if ($details['status'] == 'deleted') {
+            echo "Status: Deleted\n";
+        } else {
+            echo "Status: Modified\n";
+            // Get commit IDs for the file from branch1
+            $commit_ids = getCommitIDsForFile($branch1, $file);
+            if (!empty($commit_ids)) {
+                echo "Commit IDs for changes:\n";
+                foreach ($commit_ids as $commit_id) {
+                    echo "  $commit_id\n";
+                }
+            }
+            if (!empty($details['changes'])) {
+                echo "Changes:\n";
+                foreach ($details['changes'] as $change) {
+                    $action = ($change['type'] == 'added') ? 'Added' : 'Removed';
+                    echo "  $action: " . trim($change['line']) . "\n";
+                }
+            }
+        }
+        echo "\n";
+    }
+}
+
+// Function to get git diff output dynamically (via file, stdin, or command)
+function getGitDiff2($source = 'stdin', $branch1 = 'branch1', $branch2 = 'branch2') {
+    $diff_output = [];
+
+    if ($source === 'file') {
+        // Read from a file (assumes a file path provided)
+        $file_path = 'git_diff_output.txt';  // Change this path if needed
+        if (file_exists($file_path)) {
+            $diff_output = file($file_path, FILE_IGNORE_NEW_LINES);
+        } else {
+            echo "Error: File not found.\n";
+            exit(1);
+        }
+    } elseif ($source === 'stdin') {
+        // Read from standard input (ideal for shell piping)
+        echo "Enter or paste the git diff output (end input with Ctrl+D on UNIX or Ctrl+Z on Windows):\n";
+        while ($line = fgets(STDIN)) {
+            $diff_output[] = trim($line);
+        }
+    } elseif ($source === 'command') {
+        // Execute the git diff command and capture the output
+        $command = "git diff $branch1 $branch2";
+        exec($command, $diff_output);
+    }
+
+    return $diff_output;
+}
+
+// Get git diff output dynamically (from stdin, file, or git diff command)
+$diff_source = 'command';  // Change to 'file', 'stdin', or 'command' based on your needs
+$branch1 = 'test';  // Set your branch name (branch1)
+$branch2 = 'uat';  // Set your other branch name (branch2)
+$diff_output = getGitDiff2($diff_source, $branch1, $branch2);
+
+// Parse and display the git diff summary with commit IDs
+if (!empty($diff_output)) {
+    $parsed_diff = parseGitDiff2($diff_output);
+    displayDiffSummaryWithCommits($parsed_diff, $branch1);
+} else {
+    echo "No diff data available.\n";
+}die;
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php
+
+// Function to parse git diff output
 function parseGitDiff($diff_output) {
     $changes = [];
     $currentFile = null;
